@@ -1,21 +1,21 @@
 {%- comment -%}
-  {%- include nav/collection.html 
+  {%- include nav/collection.html
         pages = array
         key = name_or_nil
         page = page -%}
   outputs the main navigation links for `pages`. It also assigns arrays of pages
   to variables inspected by `nav/crumbs` and `nav/toc`.
-  
+
   When `key` is `nil`, `pages` is `site.html_pages`; otherwise `key` is the name
   of a collection, and `pages` are the pages of that collection. (Pages without
   a `title` are automatically excluded in the former case, but Jekyll provides
   default titles for pages in collections, so their untitled pages are not
   automatically excluded.)
-  
+
   `collection` first groups `pages` by their `parent` fields, creating an
   unsorted array of hashes, assigned to `nav_parenthood`.
-  
-  When `pages` contains the current `page`, `collection` calls `nav/page` to 
+
+  When `pages` contains the current `page`, `collection` calls `nav/page` to
   search for the navigation path to `page`, then:
   - assigns to `nav_page_path` the string of page titles leading to `page`,
   - assigns to `nav_page_ancestors` the array of ancestors of `page`, and
@@ -27,9 +27,9 @@
   can exponentially reduce the build time. To avoid dependence on assumptions
   about the folders used to store pages, however, exhaustive search is needed
   as a fall-back when directed search fails.
-  
-  Finally, `collection` outputs the main navigation links for `pages`. 
-  
+
+  Finally, `collection` outputs the main navigation links for `pages`.
+
   The presence of navigation expanders requires the navigation links for the
   entire site to be output on every page. To reduce build time, the navigation
   links for inactive top-level nodes are cached. (It would be possible to cache
@@ -40,8 +40,29 @@
 {%- assign nav_parenthood = include.pages
       | where_exp: "item", "item.title != nil" | group_by: "parent" -%}
 
+{%- comment -%}
+odashevskii: `nav_parenthood` is an array of hashes:
+
+[
+  {
+    "name" => "parent value 1",
+    "items" => [ ...include.pages... with parent == "parent value 1"],
+  },
+  {
+    "name" => "parent value 2",
+    "items" => [ ... ],
+  },
+  ...
+]
+{%- endcomment -%}
+
 {%- assign nav_top_nodes = nav_parenthood
       | where_exp: "item", "item.name == ''" | map: "items" | first -%}
+
+{%- comment -%}
+odashevskii: this extracts items where parent was empty and assigns them to `nav_top_nodes`.
+{%- endcomment -%}
+
 
 {%- assign nav_page_path = nil -%}
 
@@ -52,6 +73,10 @@
 
 {%- capture nav_newline %}
 {% endcapture -%}
+
+  {%- comment -%}
+  odashevskii: here are two attempts to figure out ancestry (one is using paths, the other one is looking everywhere).
+  {%- endcomment -%}
 
   {%- include nav/page.html
         direct = true
@@ -70,7 +95,7 @@
           in_section = nil
           page = include.page -%}
   {%- endunless -%}
-  
+
 {%- endif -%}
 
 {%- include nav/sorted.html
@@ -78,7 +103,7 @@
 
 {%- include nav/links.html
       nodes = nav_sorted
-      path = nav_newline 
+      path = nav_newline
       in_section = nil
       pages = include.pages
       page = include.page -%}

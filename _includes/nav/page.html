@@ -1,16 +1,16 @@
 {%- comment -%}
-  {%- include nav/page.html 
+  {%- include nav/page.html
         direct = bool
-        nodes = array 
+        nodes = array
         ancestors = array
-        path = string 
+        path = string
         in_section = value_or_nil
         page = page -%}
   searches for the location of the current page in the part of the navigation
   for the `nodes` parameter, using `nav_parenthood` for finding child pages.
   When the current page is located, `nav/page` assigns values to
   `nav_page_ancestors`, `nav_page_path`, and `nav_page_children`.
-  
+
   When `direct` is false, the search is exhaustive; otherwise it is directed by
   the directory hierarchy. (An outer `docs` directory is ignored, which supports
   sites where documentation pages are kept separately from source code pages.)
@@ -27,14 +27,14 @@
     {%- endif -%}
 
     {%- if nav_page_dir contains node_dir or include.direct == false -%}
-      
+
       {%- if node.section_id -%}
         {%- assign nav_section = node.section_id -%}
       {%- else -%}
         {%- assign nav_section = include.in_section -%}
       {%- endif -%}
-      
-      {%- include nav/children.html 
+
+      {%- include nav/children.html
             node = node
             path = include.path
             in_section = nav_section
@@ -42,9 +42,9 @@
 
 {%- capture nav_newline %}
 {% endcapture -%}
-    
+
       {%- assign nav_path =  include.path | append: node.title | append: nav_newline -%}
-      
+
       {%- if node.url == include.page.url -%}
         {%- assign nav_page_ancestors = include.ancestors -%}
         {%- assign nav_page_path = nav_path -%}
@@ -54,7 +54,7 @@
         {%- assign nav_page_children = nav_sorted -%}
         {%- break -%}
       {%- endif -%}
-      
+
       {%- if nav_children.size >= 1 -%}
         {%- assign nav_children_ancestors = include.ancestors | push: node -%}
         {%- include nav/page.html
@@ -65,7 +65,7 @@
               in_section = nav_section
               page = include.page -%}
       {%- endif -%}
-    
+
     {%- endif -%}
   {%- endfor -%}
 {%- endunless -%}

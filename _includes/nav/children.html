@@ -11,7 +11,7 @@
 {%- endcomment -%}
 
 {%- assign nav_candidates = nav_parenthood
-      | where: "name", include.node.title | map: "items" | first -%}
+      | where: "name", include.node.path | map: "items" | first -%}
 {%- assign nav_children = "" | split: "X" -%}
 
 {%- for child in nav_candidates -%}
