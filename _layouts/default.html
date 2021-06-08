@@ -144,6 +144,11 @@ layout: table_wrappers
                     <a href="{{ site.gh_edit_repository }}/{{ site.gh_edit_view_mode }}/{{ site.gh_edit_branch }}{% if site.gh_edit_source %}/{{ site.gh_edit_source }}{% endif %}/{{ page.path }}" id="edit-this-page">{{ site.gh_edit_link_text }}</a>
                   </p>
                 {% endif %}
+                {% if page.repo and site.gh_host %}
+                  <p class="text-small text-grey-dk-000 mb-0">
+                    <a href="https://{{ site.gh_host }}/{{ page.repo }}/tree/master/docs/{{ page.path }}" id="edit-this-page">Page source</a>
+                  </p>
+                {% endif %}
               </div>
             {% endif %}
           </footer>
