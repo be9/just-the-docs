@@ -73,7 +73,7 @@ function initSearch() {
 
   request.onload = function(){
     if (request.status >= 200 && request.status < 400) {
-      w = new Worker('assets/js/worker.js');
+      w = new Worker('/assets/js/worker.js');
       w.onmessage = function(e) {
         var index = lunr.Index.load(e.data.index);
         console.log('returned:', e.data.index, e.data.docs);
