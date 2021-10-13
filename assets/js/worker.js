@@ -1,3 +1,5 @@
+---
+---
 onmessage = function(e) {
   importScripts('vendor/lunr.min.js')
 
